@@ -74,8 +74,13 @@ module JavaBuildpack
       no_container unless container
 
       commands = []
-      commands << component_detection('JRE', @jres, true).first.release
-      component_detection('framework', @frameworks, false).map(&:release)
+      first = component_detection('JRE', @jres, true).first
+      @logger.debug { "**************** #{first.inspect}" }
+      commands << first.release
+      @logger.debug { "**************** #{commands.inspect}" }
+      comdetect = component_detection('framework', @frameworks, false)
+      @logger.debug { "**************** #{comdetect.inspect}" }
+      comdetect.map(&:release)
       commands << container.release
 
       payload = {

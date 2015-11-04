@@ -44,18 +44,6 @@ module JavaBuildpack
         manifest_class_path.each { |path| @droplet.additional_libraries << path }
         @droplet.environment_variables.add_environment_variable 'SERVER_PORT', '$PORT' if boot_launcher?
 
-        release_text
-      end
-
-      private
-
-      ARGUMENTS_PROPERTY = 'arguments'.freeze
-
-      CLASS_PATH_PROPERTY = 'Class-Path'.freeze
-
-      private_constant :ARGUMENTS_PROPERTY, :CLASS_PATH_PROPERTY
-
-      def release_text
         [
           @droplet.environment_variables.as_env_vars,
           "#{qualify_path @droplet.java_home.root, @droplet.root}/bin/java",
@@ -65,6 +53,14 @@ module JavaBuildpack
           arguments
         ].flatten.compact.join(' ')
       end
+
+      private
+
+      ARGUMENTS_PROPERTY = 'arguments'.freeze
+
+      CLASS_PATH_PROPERTY = 'Class-Path'.freeze
+
+      private_constant :ARGUMENTS_PROPERTY, :CLASS_PATH_PROPERTY
 
       def arguments
         @configuration[ARGUMENTS_PROPERTY]
